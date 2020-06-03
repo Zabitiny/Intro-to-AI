@@ -1,0 +1,10 @@
+all:
+    .gitignore
+    Informed\ Search/*.class
+    Constraint\ Satisfaction/a.out
+    Local\ Search/a.out
+    .vscode/*.json
+    Constraint\ Satisfaction/Makefile
+    Local\ Search/Makefile
+    README
+    Program\ output
