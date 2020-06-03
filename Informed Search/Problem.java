@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Collections;
 import java.util.Vector;
@@ -7,7 +8,6 @@ import java.util.Vector;
 public class Problem {
     private static final int SIZE = 9;
     private int[] initialState = new int[SIZE];
-    private int space;
     
     /**Constructor for initial problem
      * generates random, valid initial state 
@@ -16,6 +16,7 @@ public class Problem {
         List<Integer> list = new ArrayList<>(SIZE);
         boolean valid = false;
         while(!valid) {
+            list.clear();
             Random rand = new Random();
             for(int i=0; i < SIZE; i++) list.add(i);
             Collections.shuffle(list, new Random(rand.nextLong()));
@@ -23,8 +24,8 @@ public class Problem {
             int counter = 0;
             for(int i=0; i < SIZE-1; i++) {
                 for(int j=i+1; j < SIZE; j++){
-                    if(list.get(i) != 0 && list.get(i) != 0){
-                        if(list.get(i) < list.get(i)) {
+                    if(list.get(i) != 0 && list.get(j) != 0){
+                        if(list.get(j) < list.get(i)) {
                             counter++;
                         }
                     }
@@ -32,33 +33,19 @@ public class Problem {
             }
             valid = (counter%2 == 0);
         }
-
-        for(int i=0; i < SIZE; i++) {
-            initialState[i] = list.get(i);
-            if(initialState[i] == 0) space = i;
-        }
+        for(int i=0; i < SIZE; i++) initialState[i] = list.get(i);
+        System.out.println("initial state: "+ Arrays.toString(initialState));
     }
 
     //Constructor provided array
     public Problem(int[] arr) {
         initialState = arr;
-        for(int i=0; i < SIZE; i++) if(initialState[i] == 0) space = i;
     }
 
-    private void swap(int[] arr, int x, int y) {
+    public void swap(int[] arr, int x, int y) {
         int temp = arr[x];
         arr[x] = arr[y];
         arr[y] = temp;
-    }
-    
-    public int[] transition(int[] state, Action act) {
-        System.out.println("space: "+ space);
-        if(act == Action.UP) swap(state, space, space -= 3);
-        else if(act == Action.DOWN) swap(state, space, space += 3);
-        else if(act == Action.LEFT) swap(state, space, space -= 1);
-        else swap(state, space, space += 1);
-
-        return state;
     }
 
     public boolean goalTest(int[] state) {
@@ -66,7 +53,7 @@ public class Problem {
         return true;
     }
 
-    public Vector<Action> generateActions(int[] state) {
+    public Vector<Action> generateActions(int[] state, int space) {
         Vector<Action> actions = new Vector<Action>();
 
         if(space > 2) actions.add(Action.UP);

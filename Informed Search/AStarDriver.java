@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class AStarDriver extends Search {
@@ -71,24 +72,27 @@ public class AStarDriver extends Search {
                 System.out.println("Running tests now\n");
                 for(int i=1; i <= 1000; i++) {
                     Problem prob = new Problem();
-                    System.out.print("Test "+i+":");
+                    System.out.print("Test "+i+": ");
                     double start = System.nanoTime();
-                    AStar(prob, heur, graph);
-                    System.out.println("Time: "+ (System.nanoTime() - start)/1000000000);
+                    AStar(prob, heur, graph, test);
+                    System.out.println("Time: "+ (System.nanoTime() - start)/1000000000 +" seconds");
                 }
             }
             else{
                 valid = false;
                 while(!valid) {
                     try {
+                        System.out.println("What puzzle would you like to solve?");
                         System.out.println("1) Random puzzle");
                         System.out.println("2) Manually enter it");
                         String line = scan.nextLine();
                         int choice = Integer.parseInt(line);
                         if(choice == 1){
                             valid = true;
-                            Problem problem = new Problem();
-                            AStar(problem, heur, graph);
+                            Problem prob = new Problem();
+                            System.out.println("running algorithm now with inital state: "
+                                + Arrays.toString(prob.getInitialState()));
+                            AStar(prob, heur, graph, test);
                         }
                         else if(choice == 2) {
                             int n = getSize();
@@ -138,7 +142,7 @@ public class AStarDriver extends Search {
                                     else if(valid){
                                         System.out.println("Running algorithm now");
                                         Problem prob = new Problem(arr);
-                                        AStar(prob, heur, graph);
+                                        AStar(prob, heur, graph, test);
                                     }
                                     else System.out.println("\nYou did not enter a solvable array. Try again: ");
                                 } catch(IndexOutOfBoundsException e) {

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Search extends Problem {
 
-    public static void AStar(Problem prob, boolean heur, boolean exp) {
+    public static void AStar(Problem prob, boolean heur, boolean exp, boolean test) {
         Node node = new Node(prob, heur);
         PriorityQueue<Node> frontier = new PriorityQueue<Node>();
         frontier.add(node);
@@ -20,10 +20,9 @@ public class Search extends Problem {
             node = frontier.poll();
             
             if(prob.goalTest(node.state)) {
-                System.out.println("Success: " 
-                    + Arrays.toString(node.state) +" Depth: "
+                System.out.println("Success! Depth: "
                     + node.pathCost + " Search Cost: " + nodeCounter);
-                success(node);
+                if(!test) success(node);
                 return;
             }
             if(node.pathCost > 24) {
@@ -33,8 +32,8 @@ public class Search extends Problem {
             if(exp) explored.add(node);
             
             //generate successors
-            for(Action act : prob.generateActions(node.state)) {
-                Node child = new Node(prob, node, act, heur);
+            for(Action act : prob.generateActions(node.state, node.space)) {
+                Node child = new Node(prob, node, act, heur, test);
                 if(exp && !explored.contains(child)) {
                     frontier.add(child);
                     nodeCounter++;
@@ -49,7 +48,8 @@ public class Search extends Problem {
 
     //for printing out path of nodes to success
     private static void success(Node node) {
-        Node prev = null, curr = node, next=node;
+        System.out.println("Path found:");
+        Node prev = null, curr = node, next = node;
         while(curr != null) {
             next = curr.parent;
             curr.parent = prev;
@@ -65,6 +65,7 @@ public class Search extends Problem {
 
     private static class Node implements Comparable<Node> {
         private int[] state;
+        private int space;
         private Integer estCost;
         private int pathCost;
         private Node parent;
@@ -72,15 +73,24 @@ public class Search extends Problem {
 
         // Constructor for initial node
         public Node(Problem prob, boolean heur) {
-            state = Arrays.copyOf(prob.getInitialState(), getSize());
+            state = prob.getInitialState();
+            int n = getSize();
+            for(int i=0; i < n; i++) if(state[i] == 0) space = i;
             pathCost = 0;
             estCost = pathCost + (heur? hamming() : manhattan());
             parent = null;
         }
         
         // Constructor for successor nodes
-        public Node(Problem prob, Node node, Action act, boolean heur) {
-            state = prob.transition(node.state, act);
+        public Node(Problem prob, Node node, Action act, boolean heur, boolean test) {
+            if(!test) state = Arrays.copyOf(node.state, getSize());   //copy is for printing path at end
+            else state = node.state;
+
+            if(act == Action.UP) prob.swap(state, node.space, space = node.space-3);
+            else if(act == Action.DOWN) prob.swap(state, node.space, space = node.space+3);
+            else if(act == Action.LEFT) prob.swap(state, node.space, space = node.space-1);
+            else prob.swap(state, node.space, space = node.space+1);
+
             pathCost = node.pathCost +1;
             estCost = pathCost + (heur? hamming() : manhattan());
             parent = node;
