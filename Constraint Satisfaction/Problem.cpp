@@ -1,9 +1,7 @@
 #include "Problem.h"
 
 Problem::Problem() {
-    for(int& i : init_board) {
-        i = random<int>(0, PROBLEM_SIZE-1);
-    }
+    for(int& i : init_board) i = random<int>(0, PROBLEM_SIZE-1);
     update_constraints(init_board);
 }
 
@@ -30,7 +28,7 @@ void Problem::update_constraints(const board_t& brd) {
     }
 }
 
-bool Problem::isGoal(board_t& brd) {
+bool Problem::is_goal(board_t& brd) {
     for(auto i=0u; i < PROBLEM_SIZE-1; i++) {
         for(auto j=i+1; j < PROBLEM_SIZE; j++) {
             auto deltaI = j-i;
@@ -43,6 +41,6 @@ bool Problem::isGoal(board_t& brd) {
     return true;
 }
 
-board_t& Problem::getInitBoard() {
+board_t& Problem::get_init_board() {
     return init_board;
 }

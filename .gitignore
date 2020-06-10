@@ -1,8 +1,13 @@
 .gitignore
-Informed\ Search/*.class
-Constraint\ Satisfaction/a.out
-Local\ Search/a.out
-.vscode/*.json
+
+Adversarial\ Search/
+
 Constraint\ Satisfaction/Makefile
+Constraint\ Satisfaction/a.out
+Constraint\ Satisfaction/.vscode/
+
+Informed\ Search/*.class
+
+Local\ Search/a.out
 Local\ Search/Makefile
-Program\ output
+Local\ Search/.vscode/

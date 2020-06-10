@@ -12,7 +12,7 @@
  * C: set of constraints 
  * 
  * In this case, X is each index of the board
- * D is all the numbers 0-PROBLEM_SIZE
+ * D is all the numbers in the board
  * C is the vector of variables that are constrained*/
 
 static constexpr unsigned PROBLEM_SIZE = 25;
@@ -28,12 +28,12 @@ T random(T lower, T upper){
 
 class Problem {
     public:
-        std::vector<unsigned> constraints;  //C
-
+        std::vector<unsigned> constraints;
+        
         Problem();
         void update_constraints(const board_t& brd);
-        bool isGoal(board_t& brd);
-        board_t& getInitBoard();
+        bool is_goal(board_t& brd);
+        board_t& get_init_board();
 
     private:
         board_t init_board;
